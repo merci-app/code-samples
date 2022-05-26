@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-
+	"github.com/merci-app/code-samples/go/authorization"
 )
 
 func main() {
