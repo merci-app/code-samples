@@ -17,12 +17,18 @@ type RequestInterface interface {
 }
 
 type Request struct {
-	AccessToken authorization.AccessToken
+	accessToken authorization.AccessToken
+}
+
+func NewRequest(accessToken authorization.AccessToken) *Request {
+	return &Request{
+		accessToken: accessToken,
+	}
 }
 
 func (r *Request) Post(url string, request, response interface{}) (*http.Response, []byte, error) {
 
-	token, tokenErr := r.AccessToken.Authenticate()
+	token, tokenErr := r.accessToken.Authenticate()
 	if tokenErr != nil {
 		return nil, nil, tokenErr
 	}
@@ -38,7 +44,7 @@ func (r *Request) Post(url string, request, response interface{}) (*http.Respons
 
 func (r *Request) Get(url string, response interface{}) (*http.Response, []byte, error) {
 
-	token, tokenErr := r.AccessToken.Authenticate()
+	token, tokenErr := r.accessToken.Authenticate()
 	if tokenErr != nil {
 		return nil, nil, tokenErr
 	}
@@ -53,7 +59,7 @@ func (r *Request) Get(url string, response interface{}) (*http.Response, []byte,
 
 func (r *Request) Put(url string, request, response interface{}) (*http.Response, []byte, error) {
 
-	token, tokenErr := r.AccessToken.Authenticate()
+	token, tokenErr := r.accessToken.Authenticate()
 	if tokenErr != nil {
 		return nil, nil, tokenErr
 	}
@@ -69,7 +75,7 @@ func (r *Request) Put(url string, request, response interface{}) (*http.Response
 
 func (r *Request) Delete(url string, request, response interface{}) (*http.Response, []byte, error) {
 
-	token, tokenErr := r.AccessToken.Authenticate()
+	token, tokenErr := r.accessToken.Authenticate()
 	if tokenErr != nil {
 		return nil, nil, tokenErr
 	}

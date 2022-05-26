@@ -5,17 +5,15 @@ import (
 	"github.com/merci-app/code-samples/api/go/authorization"
 )
 
-var (
-	accessToken = authorization.AccessToken{
+func main() {
+	accessToken := authorization.AccessToken{
 		Username: "<USERNAME>",
 		Password: "<PASSWORD>",
 	}
-)
 
-func main() {
 	resp, err := accessToken.Authenticate()
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println(resp, err)
+	fmt.Println(resp)
 }
