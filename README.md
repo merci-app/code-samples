@@ -1,4 +1,11 @@
-# code-samples
+# Dock code-samples
 
-Code samples for Caradhras APIs<br>
-The repo contains language-specific directories that contain the samples.
+For information on using the Dock Caradhras APIs, including client API documentation, please visit the [https://lighthouse.dock.tech/](https://lighthouse.dock.tech/)
+
+## Overview
+
+(TODO)
+
+## code-samples
+
+* Go [https://github.com/merci-app/code-samples/tree/main/go](https://github.com/merci-app/code-samples/tree/main/go)
