@@ -5,10 +5,13 @@ import (
 	"github.com/merci-app/code-samples/go/authorization"
 	"github.com/merci-app/code-samples/go/request"
 	"net/http"
+	"os"
 )
 
 func main() {
-	accessToken := authorization.NewAuthorization("<USERNAME>", "<PASSWORD>")
+	username := os.Getenv("dock_username")
+	password := os.Getenv("dock_password")
+	accessToken := authorization.NewAuthorization(username, password)
 
 	var response RegDocsResponse
 	req := request.NewRequest(*accessToken)
