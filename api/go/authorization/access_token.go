@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-type AccessToken struct {
+type Authorization struct {
 	Username    string
 	Password    string
 	Token       string
@@ -17,60 +17,67 @@ type AccessToken struct {
 	Lock        sync.Mutex
 }
 
-func (at *AccessToken) Authenticate() (string, error) {
-	at.Lock.Lock()
-	defer at.Lock.Unlock()
+func NewAuthorization(username, password string) *Authorization {
+	return &Authorization{
+		Username: username,
+		Password: password,
+	}
+}
 
-	token, err := at.getApiTokenFromMemory()
+func (a *Authorization) Authenticate() (string, error) {
+	a.Lock.Lock()
+	defer a.Lock.Unlock()
+
+	token, err := a.getApiTokenFromMemory()
 	if err != nil {
-		t, expires, err := at.getApiTokenFromRequest()
+		t, expires, err := a.getApiTokenFromRequest()
 		if err != nil {
 			return "", err
 		}
-		at.setApiToken(t, expires)
+		a.setApiToken(t, expires)
 		token = t
 	}
 
 	return token, nil
 }
 
-func (at *AccessToken) getApiTokenFromRequest() (string, time.Time, error) {
+func (a *Authorization) getApiTokenFromRequest() (string, time.Time, error) {
 
-	type oauthResponse struct {
-		AccessToken string `json:"access_token"`
-		ExpiresIn   int    `json:"expires_in"`
+	type authResponse struct {
+		Authorization string `json:"access_token"`
+		ExpiresIn     int    `json:"expires_in"`
+
+		Error string `json:"error"`
 	}
-	var response oauthResponse
+	var response authResponse
 
 	url := "https://auth.hml.caradhras.io/oauth2/token?grant_type=client_credentials"
-	basicAuth := base64.StdEncoding.EncodeToString([]byte(at.Username + ":" + at.Password))
+	basicAuth := base64.StdEncoding.EncodeToString([]byte(a.Username + ":" + a.Password))
 
 	req := client.NewClient()
 	resp, _, err := req.Post(url).
-		Set("Content-Type", "application/x-www-form-urlencoded").
-		Set("Authorization", "Basic "+basicAuth).
+		Set("Content-Type", "applicaion/x-www-form-urlencoded").
+		Set("Authorizaion", "Basic "+basicAuth).
 		Do(&response)
 
 	if err != nil {
-		return "", time.Time{}, errors.New("communication failed")
+		return "", time.Time{}, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return "", time.Time{}, errors.New("communication error")
+		return "", time.Time{}, errors.New(response.Error)
 	}
 
-	timeToExpire := time.Now().Add(time.Duration(response.ExpiresIn-10) * time.Second)
-
-	return response.AccessToken, timeToExpire, nil
+	return response.Authorization, time.Now().Add(time.Duration(response.ExpiresIn-10) * time.Second), nil
 }
 
-func (at *AccessToken) getApiTokenFromMemory() (string, error) {
-	if time.Now().After(at.ExpireToken) {
+func (a *Authorization) getApiTokenFromMemory() (string, error) {
+	if time.Now().After(a.ExpireToken) {
 		return "", errors.New("expired token")
 	}
-	return at.Token, nil
+	return a.Token, nil
 }
 
-func (at *AccessToken) setApiToken(token string, time time.Time) {
-	at.Token = token
-	at.ExpireToken = time
+func (a *Authorization) setApiToken(token string, time time.Time) {
+	a.Token = token
+	a.ExpireToken = time
 }

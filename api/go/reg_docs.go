@@ -8,13 +8,10 @@ import (
 )
 
 func main() {
-	accessToken := authorization.AccessToken{
-		Username: "<USERNAME>",
-		Password: "<PASSWORD>",
-	}
+	accessToken := authorization.NewAuthorization("<USERNAME>", "<PASSWORD>")
 
 	var response RegDocsResponse
-	req := request.NewRequest(accessToken)
+	req := request.NewRequest(*accessToken)
 	resp, body, err := req.Get("https://regdocs.hml.caradhras.io/v1/registration?types=PRIVACY_POLICY&types=TERMS_OF_USE", &response)
 	if err != nil {
 		panic(err.Error())

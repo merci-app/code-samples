@@ -17,10 +17,10 @@ type RequestInterface interface {
 }
 
 type Request struct {
-	accessToken authorization.AccessToken
+	accessToken authorization.Authorization
 }
 
-func NewRequest(accessToken authorization.AccessToken) *Request {
+func NewRequest(accessToken authorization.Authorization) *Request {
 	return &Request{
 		accessToken: accessToken,
 	}

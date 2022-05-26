@@ -6,11 +6,7 @@ import (
 )
 
 func main() {
-	accessToken := authorization.AccessToken{
-		Username: "<USERNAME>",
-		Password: "<PASSWORD>",
-	}
-
+	accessToken := authorization.NewAuthorization("<USERNAME>", "<PASSWORD>")
 	resp, err := accessToken.Authenticate()
 	if err != nil {
 		panic(err.Error())
