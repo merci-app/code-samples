@@ -1,8 +1,8 @@
 package request
 
 import (
-	"github.com/merci-app/code-samples/api/go/authorization"
-	"github.com/merci-app/code-samples/api/go/client"
+	"github.com/merci-app/code-samples/go/authorization"
+	"github.com/merci-app/code-samples/go/client"
 	"net/http"
 	"time"
 )

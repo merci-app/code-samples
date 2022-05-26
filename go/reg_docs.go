@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/merci-app/code-samples/api/go/authorization"
-	"github.com/merci-app/code-samples/api/go/request"
+	"github.com/merci-app/code-samples/go/authorization"
+	"github.com/merci-app/code-samples/go/request"
 	"net/http"
 )
 

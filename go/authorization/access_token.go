@@ -3,7 +3,7 @@ package authorization
 import (
 	"encoding/base64"
 	"errors"
-	"github.com/merci-app/code-samples/api/go/client"
+	"github.com/merci-app/code-samples/go/client"
 	"net/http"
 	"sync"
 	"time"
