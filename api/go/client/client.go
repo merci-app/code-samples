@@ -1,8 +1,7 @@
-package request
+package client
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,7 +25,6 @@ const (
 type Client struct {
 	httpClient *http.Client
 	header     http.Header
-	ctx        context.Context
 	transport  *http.Transport
 	req        *http.Request
 	method     string
@@ -60,11 +58,10 @@ func (p ProxiedRoundTrip) RoundTrip(req *http.Request) (res *http.Response, e er
 	return
 }
 
-func NewClient(ctx context.Context) *Client {
+func NewClient() *Client {
 	c := &Client{
 		httpClient: &http.Client{},
 		header:     http.Header{},
-		ctx:        ctx,
 	}
 
 	c.header.Add(contentTypeHeader, applicationJSON)
@@ -162,12 +159,7 @@ func (c *Client) NewRequest(method string, path string, body *bytes.Buffer) (req
 	}
 
 	req.URL.RawQuery = req.URL.Query().Encode()
-
 	req.Header = c.header
-
-	if c.ctx != nil {
-		req = req.WithContext(c.ctx)
-	}
 
 	return
 }
@@ -232,11 +224,9 @@ func (c *Client) doRequest(v interface{}) (resp *http.Response, body []byte, err
 
 	if c.params != nil {
 		q := c.req.URL.Query()
-
 		for k, v := range c.params {
 			q.Add(k, v)
 		}
-
 		c.req.URL.RawQuery = q.Encode()
 	}
 
