@@ -10,11 +10,11 @@ import (
 )
 
 type Authorization struct {
-	username    string
-	password    string
-	token       string
-	expireToken time.Time
-	lock        sync.Mutex
+	username        string
+	password        string
+	token           string
+	tokenExpiration time.Time
+	lock            sync.Mutex
 }
 
 func NewAuthorization(username, password string) *Authorization {
@@ -71,7 +71,7 @@ func (a *Authorization) getApiTokenFromRequest() (string, time.Time, error) {
 }
 
 func (a *Authorization) getApiTokenFromMemory() (string, error) {
-	if time.Now().After(a.expireToken) {
+	if time.Now().After(a.tokenExpiration) {
 		return "", errors.New("expired token")
 	}
 	return a.token, nil
@@ -79,5 +79,5 @@ func (a *Authorization) getApiTokenFromMemory() (string, error) {
 
 func (a *Authorization) setApiToken(token string, time time.Time) {
 	a.token = token
-	a.expireToken = time
+	a.tokenExpiration = time
 }
