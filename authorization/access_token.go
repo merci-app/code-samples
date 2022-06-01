@@ -10,23 +10,23 @@ import (
 )
 
 type Authorization struct {
-	Username    string
-	Password    string
-	Token       string
-	ExpireToken time.Time
-	Lock        sync.Mutex
+	username    string
+	password    string
+	token       string
+	expireToken time.Time
+	lock        sync.Mutex
 }
 
 func NewAuthorization(username, password string) *Authorization {
 	return &Authorization{
-		Username: username,
-		Password: password,
+		username: username,
+		password: password,
 	}
 }
 
 func (a *Authorization) Authenticate() (string, error) {
-	a.Lock.Lock()
-	defer a.Lock.Unlock()
+	a.lock.Lock()
+	defer a.lock.Unlock()
 
 	token, err := a.getApiTokenFromMemory()
 	if err != nil {
@@ -52,7 +52,7 @@ func (a *Authorization) getApiTokenFromRequest() (string, time.Time, error) {
 	var response authResponse
 
 	url := "https://auth.hml.caradhras.io/oauth2/token?grant_type=client_credentials"
-	basicAuth := base64.StdEncoding.EncodeToString([]byte(a.Username + ":" + a.Password))
+	basicAuth := base64.StdEncoding.EncodeToString([]byte(a.username + ":" + a.password))
 
 	req := client.NewClient()
 	resp, _, err := req.Post(url).
@@ -71,13 +71,13 @@ func (a *Authorization) getApiTokenFromRequest() (string, time.Time, error) {
 }
 
 func (a *Authorization) getApiTokenFromMemory() (string, error) {
-	if time.Now().After(a.ExpireToken) {
+	if time.Now().After(a.expireToken) {
 		return "", errors.New("expired token")
 	}
-	return a.Token, nil
+	return a.token, nil
 }
 
 func (a *Authorization) setApiToken(token string, time time.Time) {
-	a.Token = token
-	a.ExpireToken = time
+	a.token = token
+	a.expireToken = time
 }
