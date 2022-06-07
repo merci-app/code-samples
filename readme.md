@@ -1,10 +1,8 @@
 # Go code-samples
 
-This repository contains a collection of Go code-samples and libraries for Dock Caradhras APIs.
-
 ## Description
 
-An in-depth paragraph about your project and overview of use. (TODO)
+This repository contains a collection of Go code-samples and libraries for Dock Caradhras APIs.
 
 ## Getting Started
 
@@ -21,7 +19,7 @@ An in-depth paragraph about your project and overview of use. (TODO)
 ### Installing
 
 ```
-$ git clone https://github.com/merci-app/code-samples/go
+$ git clone https://github.com/merci-app/code-samples
 $ cd go
 ```
 
@@ -31,16 +29,12 @@ $ cd go
 $ go run <FILE_NAME>.go
 ```
 
-## Help
-
-Any advise for common problems or issues.
-
 ## Authors
 
 Contributors names and contact info
 
-ex. Dominique Pizzie
-
+- André Russowsky
+- Nilton Kummer
 ## Version History
 
 * 0.1
